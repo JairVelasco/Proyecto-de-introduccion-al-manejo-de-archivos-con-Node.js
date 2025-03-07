@@ -4,61 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Notas</title>
+    <script defer src="script.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; }
+        .nota { border: 1px solid #ccc; padding: 10px; margin: 5px 0; }
+        button { margin-left: 10px; }
+    </style>
 </head>
 <body>
-    <h1>Gestor de Notas Personales</h1>
+    <h1>Gestor de Notas</h1>
     <form id="notaForm">
-        <input type="text" id="titulo" placeholder="Título de la nota" required>
-        <textarea id="contenido" placeholder="Contenido de la nota" required></textarea>
+        <input type="text" id="titulo" placeholder="Título" required>
+        <input type="text" id="contenido" placeholder="Contenido" required>
         <button type="submit">Agregar Nota</button>
     </form>
-
-    <h2>Notas</h2>
-    <ul id="listaNotas"></ul>
-
-    <script>
-        // Función para obtener las notas del servidor
-        function obtenerNotas() {
-            fetch('/notas')
-                .then(response => response.json())
-                .then(notas => {
-                    const listaNotas = document.getElementById('listaNotas');
-                    listaNotas.innerHTML = ''; // Limpiar lista
-                    notas.forEach(nota => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `<strong>${nota.titulo}</strong>: ${nota.contenido} <button onclick="eliminarNota('${nota.titulo}')">Eliminar</button>`;
-                        listaNotas.appendChild(li);
-                    });
-                });
-        }
-
-        // Función para agregar una nueva nota
-        document.getElementById('notaForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const titulo = document.getElementById('titulo').value;
-            const contenido = document.getElementById('contenido').value;
-            fetch('/notas', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ titulo, contenido })
-            })
-            .then(() => {
-                obtenerNotas();
-                document.getElementById('titulo').value = '';
-                document.getElementById('contenido').value = '';
-            });
-        });
-
-        // Función para eliminar una nota
-        function eliminarNota(titulo) {
-            fetch(`/notas/${titulo}`, {
-                method: 'DELETE',
-            })
-            .then(() => obtenerNotas());
-        }
-
-        // Cargar las notas cuando la página se cargue
-        window.onload = obtenerNotas;
-    </script>
+    <h2>Notas Guardadas</h2>
+    <div id="listaNotas"></div>
 </body>
 </html>
